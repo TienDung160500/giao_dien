@@ -1,0 +1,50 @@
+<div>
+  <div class="d-flex justify-content-center" style="height: 100vh;">
+    <div class="col-lg-6 col-md-8 col-sm-10 align-items-center" style="display: inline-block; text-align: center;">
+      <img src="../../content/images/logo-icon.png" alt="logo-RangDong" style="width: 200px;">
+      <!-- <h2>công ty cổ phần bóng đèn và phích nước Rạng Đông</h2> -->
+      <h1 data-cy="loginTitle">Đăng nhập</h1>
+      <div class="alert alert-danger" *ngIf="authenticationError" data-cy="loginError">
+        <strong>Đăng nhập thất bại</strong> Vui lòng kiểm tra lại.
+      </div>
+      <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+        <div class="mb-3">
+          <!-- <label class="username-label" for="username" style="width: 70%; display: inline-block; text-align: center;">Tài khoản</label> -->
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="username"
+            placeholder="Tài khoản"
+            formControlName="username"
+            #username
+            data-cy="username"
+            style="width: 70%; display: inline-block; text-align: center;"
+          />
+        </div>
+
+        <div class="mb-3">
+          <!-- <label for="password" style="width: 70%; display: inline-block; text-align: center;">Mật khẩu</label> -->
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+            placeholder="Mật khẩu"
+            formControlName="password"
+            data-cy="password"
+            style="width: 70%; display: inline-block; text-align: center;"
+          />
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label" for="rememberMe">
+            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
+            <span>Remember</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" data-cy="submit">Đăng nhập</button>
+      </form>
+  </div>
+</div>

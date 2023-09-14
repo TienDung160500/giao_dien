@@ -1,0 +1,157 @@
+<div>
+  <div>
+    <form name="editForm" role="form" novalidate [formGroup]="editForm">
+      <h2 id="jhi-kich-ban-heading" data-cy="KichBanCreateUpdateHeading">Kịch bản</h2>
+      <header class="header-tsm">
+        <div class="header-kichban">
+        <jhi-alert-error></jhi-alert-error>
+
+          <div>
+            <label for="maKichBan">
+              <h5>Mã kịch bản</h5>
+            </label>
+            <select class="form-control" id="maKichBan"name="maKichBan" formControlName="maKichBan" (change)="onMaKichBanChange()">
+              <option [ngValue]="null"></option>
+              <option
+                [ngValue]="maKichBanOption.maKichBan"
+                *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
+                {{maKichBanOption.maKichBan}}</option>
+            </select>
+          </div>
+          <div>
+          <label for="loaiThietBi">
+            <h5>Loại thiết bị</h5>
+          </label>
+          <select class="form-control" id="loaiThietBi" name="loaiThietBi" formControlName="loaiThietBi">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="maKichBanOption.loaiThietBi"
+              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
+              {{maKichBanOption.loaiThietBi}}</option>
+          </select>
+        </div>
+
+        <div>
+            <label for="maThietBi">
+              <h5>Mã thiết bị</h5>
+            </label>
+            <select class="form-control" id="maThietBi" name="maThietBi" formControlName="maThietBi">
+              <option [ngValue]="null"></option>
+              <option
+                [ngValue]="maKichBanOption.maThietBi"
+                *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
+                {{maKichBanOption.maThietBi}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="header-kichban2">
+          
+        <div>
+          <label for="maSanPham">
+            <h5>Mã sản phẩm</h5>
+          </label>
+          <select class="form-control" id="maSanPham" name="maSanPham" formControlName="maSanPham">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="maKichBanOption.maSanPham"
+              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
+              {{maKichBanOption.maSanPham}}</option>  
+          </select>
+        </div>  
+        
+        <div>
+          <label for="versionSanPham">
+            <h5>Version sản phẩm</h5>
+          </label>
+          <select class="form-control" id="versionSanPham" name="versionSanPham" formControlName="versionSanPham">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="maKichBanOption.versionSanPham"
+              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
+              {{maKichBanOption.versionSanPham}}</option>
+          </select>
+        </div>
+      </div>
+      <button
+        type="submit"
+        id="save-entity"
+        data-cy="entityCreateSaveButton"
+        [disabled]="editForm.invalid || isSaving"
+        class="btn btn-primary"
+        style="width: 5em;"
+      >
+        <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+      </button>
+      </header>
+      <div>
+
+      <h2 id="jhi-kich-ban-heading" data-cy="KichBanCreateUpdateHeading" style="padding-top: 2em;">Thông số kịch bản</h2>
+        <button class="btn-add" style="border-radius: 0.5em;" (click)="addRow()"><fa-icon icon="plus"></fa-icon> Add</button>
+
+        <table class="table table-striped" aria-describedby="page-heading">
+          <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending">
+              <th scope="col" jhiSortBy="maKichBan"><span>Thông số</span></th>
+              <th scope="col" jhiSortBy="thongSo"><span>Min</span></th>
+              <th scope="col" jhiSortBy="trangThai"><span>Max</span></th>
+              <th scope="col" jhiSortBy="phanLoai"><span>Trung bình</span></th>
+              <th scope="col" jhiSortBy="phanLoai"><span>Đơn vị</span></th>
+              <th scope="col" jhiSortBy="phanLoai"><span>Phân loại</span></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr  data-cy="entityTable">
+              <td>
+                <input type="text" class="form-control-table" name="thongSo" id="field_thongSo"
+                  formControlName="thongSo" />
+              </td>
+              <td>
+                <input type="text" class="form-control-table" name="MinValue" id="field_MinValue"
+                  formControlName="MinValue" />
+              </td>
+              <td>
+                <input type="text" class="form-control-table" name="MaxValue" id="field_MaxValue"
+                  formControlName="MaxValue" />
+              </td>
+              <td>
+                <input type="text" class="form-control-table" name="trungBinh" id="field_trungBinh"
+                  formControlName="trungBinh" />
+              </td>
+              <td >
+                <select class="form-control-table" id="donVi" data-cy="donVi" name="donVi" formControlName="donVi" [(ngModel)]="selectedValues" (change)="onChangeValues()">
+                  <option value="active">cm</option>
+                  <option value="deactive">mm</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control-table" id="maKichBan" data-cy="maKichBan" name="maKichBan" formControlName="maKichBan" [(ngModel)]="selectedParameter" (change)="onChangeParameter()">
+                  <option value="active">Thông số máy</option>
+                  <option value="deactive">Thông số thiết bị</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+      </div>
+    </form>
+  </div>
+</div>

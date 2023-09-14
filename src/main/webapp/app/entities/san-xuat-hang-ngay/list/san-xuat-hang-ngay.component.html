@@ -1,0 +1,195 @@
+<div>
+  <h2 id="page-heading" data-cy="SanXuatHangNgayHeading">
+    <span>Sản xuất hàng ngày</span>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-san-xuat-hang-ngay"
+        [routerLink]="['/san-xuat-hang-ngay/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Thêm mới </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="sanXuatHangNgays?.length === 0">
+    <span>No sanXuatHangNgays found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="sanXuatHangNgays && sanXuatHangNgays.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending">
+          <th scope="col" jhiSortBy="id">
+            <span class="column-header">STT</span>
+          </th>
+          <th scope="col" jhiSortBy="maKichBan">
+            <span class="column-header">Mã kịch bản</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="maKichBan" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.maKichBan }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="maThietBi">
+            <span class="column-header">Mã thiết bị</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="maThietBi" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.maThietBi }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="loaiThietBi">
+            <span class="column-header">Loại thiết bị</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="loaiThietBi" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.loaiThietBi }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="dayChuyen">
+            <span class="column-header">Dây chuyền</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="dayChuyen" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.dayChuyen }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="maSanPham">
+            <span class="column-header">Mã sản phẩm</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="maSanPham" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.maSanPham }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="versionSanPham">
+            <span class="column-header">Vesion sản phẩm</span>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="versionSanPham" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.versionSanPham }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="ngayTao">
+            <span class="column-header">Ngày tạo</span>
+            <input #searchInput class="search-input" type="datetime-local" [(ngModel)]="ngayTao" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.ngayTao }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="timeUpdate">
+            <span class="column-header">Time Update</span>
+            <input #searchInput class="search-input" type="datetime-local" [(ngModel)]="timeUpdate" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
+            <ul>
+              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
+            </ul>
+            <ul *ngIf="searchResults.length > 0">
+              <li *ngFor="let result of searchResults">{{ result.timeUpdate }}</li>
+            </ul>
+          </th>
+
+          <th scope="col" jhiSortBy="trangThai">
+            <span class="column-header">Trạng thái</span>
+             <select class="form-control dropdown-toggle select" id="maKichBan" data-cy="maKichBan" name="maKichBan" formControlName="maKichBan" [(ngModel)]="selectedStatus" (change)="onChangeSearch()" style="width: 8em;">
+              <option value="active">Active</option>
+              <option value="deactive">Deactive</option>
+            </select>
+          </th>
+
+          <th scope="col">Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sanXuatHangNgay of sanXuatHangNgays;let i = index; trackBy: trackId" data-cy="entityTable">
+          <td>
+            {{i+1}}
+          </td>
+          <td>{{ sanXuatHangNgay.maKichBan }}</td>
+          <td>{{ sanXuatHangNgay.maThietBi }}</td>
+          <td>{{ sanXuatHangNgay.loaiThietBi }}</td>
+          <td>{{ sanXuatHangNgay.dayChuyen }}</td>
+          <td>{{ sanXuatHangNgay.maSanPham }}</td>
+          <td>{{ sanXuatHangNgay.versionSanPham }}</td>
+          <td>{{ sanXuatHangNgay.ngayTao | formatMediumDatetime }}</td>
+          <td>{{ sanXuatHangNgay.timeUpdate | formatMediumDatetime }}</td>
+          <td>{{ sanXuatHangNgay.trangThai }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/san-xuat-hang-ngay', sanXuatHangNgay.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/san-xuat-hang-ngay', sanXuatHangNgay.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(sanXuatHangNgay)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+    <div>
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+        style="float: right;"
+      ></ngb-pagination>
+    </div>
+</div>

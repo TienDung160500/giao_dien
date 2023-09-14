@@ -1,0 +1,79 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="sanXuatHangNgay">
+      <h2 data-cy="sanXuatHangNgayDetailsHeading"><span>Thông tin sản xuất hàng ngày</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending">
+            <th scope="col" jhiSortBy="maKichBan"><span>Mã kịch bản</span></th>
+            <th scope="col" jhiSortBy="maMay"><span>Mã máy</span></th>
+            <th scope="col" jhiSortBy="MaSanPham"><span>Mã sản phẩm</span></th>
+            <th scope="col" jhiSortBy="thongSo"><span>Thông số</span></th>
+            <th scope="col" jhiSortBy="minValue"><span>Min</span></th>
+            <th scope="col" jhiSortBy="maxValue"><span>Max</span></th>
+            <th scope="col" jhiSortBy="trungBinh"><span>Trung bình</span></th>
+            <th scope="col" jhiSortBy="donVi"><span>Đơn vị</span></th>
+            <th scope="col" jhiSortBy="trangThai"><span>Lần cập nhật gần nhất</span></th>
+
+          </tr>
+        </thead>
+        <tbody>
+        <td>
+          <span>{{ sanXuatHangNgay.maKichBan }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.maThietBi }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.maSanPham }}</span>
+        </td>
+
+        <td>
+          <!-- <span>{{ sanXuatHangNgay.chiTietSanXuats.thongSo }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.chiTietSanXuats.minValue }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.chiTietSanXuats.maxValue }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.chiTietSanXuats.trungBinh }}</span> -->
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.ngayTao | formatMediumDatetime }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.timeUpdate | formatMediumDatetime }}</span>
+        </td>
+
+        <td>
+          <span>{{ sanXuatHangNgay.trangThai }}</span>
+        </td>
+        </tbody>
+      </table>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/san-xuat-hang-ngay', sanXuatHangNgay.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
