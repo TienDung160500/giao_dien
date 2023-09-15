@@ -33,73 +33,76 @@
           <th scope="col" jhiSortBy="id"><span>STT</span></th>
           <th scope="col" jhiSortBy="maThongSo">
             <span class="column-header">Mã thông số</span>
-            <input #searchInput class="search-input" type="text" [(ngModel)]="maThongSo" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
+            <input #searchInput class="search-input" type="text" [(ngModel)]="maThongSo" (keyup.enter)= "timKiemThietBi()" placeholder="search" autocomplete="maThongSo"/>
+            <!-- <div class="ng-autocomplete">
+              <ng-autocomplete>
+                [data]="data"
+                [searchKeyword]="keyword"
+                placeholder="Select country"
+                (selected)='selectEvent($event)'
+                (inputChanged)='onChangeSearch($event)'
+                (inputFocused)='onFocused($event)'
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate"> 
+              </ng-autocomplete>
+              <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.name"></a>
+              </ng-template>
 
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.maThongSo }}</li>
-            </ul>
+              <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div> -->
+
+             <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jhcontact2App.contact.language" for="field_language">Language</label>
+                    <select class="form-control" id="field_language" name="language" formControlName="languageId"> 
+                    <option *ngIf="!editForm.get('maThongSo')!.value" [ngValue]="null" selected></option> 
+                        <option [ngValue]="quanLyThongSoOption.maThongSo" *ngFor="let quanLyThongSoOption of quanLyThongSo; trackBy: trackId">{{ quanLyThongSoOption.maThongSo }}</option>
+                    </select>
+
+                    <input type="text" class="form-control" id="field_language" formControlName="language"
+                           placeholder="{{ 'jhcontact2App.contact.language.placeholder'}}"                         
+                           (selectItem)="selectedMaThongSo(maThongSo)"
+                           [ngbTypeahead]="search"
+                           [editable]='false' />
+
+                </div>
+                <div *ngIf="editForm.get('language')!.invalid && (editForm.get('language')!.dirty || editForm.get('language')!.touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('language')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+              </div>
           </th>
           <th scope="col" jhiSortBy="tenThongSo">
             <span class="column-header">Tên thông số</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="tenThongSo" (keyup.enter)= "timKiemThietBi()" placeholder="search"/>
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.tenThongSo }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="moTa">
             <span class="column-header">Mô tả</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="moTa" (keyup.enter)= "timKiemThietBi()" placeholder="search"/>
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.moTa }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="ngayTao">
             <span class="column-header">Ngày tạo</span>
             <input #searchInput class="search-input" type="datetime-local" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.ngayTao }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="ngayUpdate">
             <span class="column-header">Ngày cập nhật</span>
             <input #searchInput class="search-input" type="datetime-local" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.ngayUpdate }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="updateBy">
             <span class="column-header">Update By</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="updateBy" (keyup.enter)= "timKiemThietBi()" placeholder="search" style="width: 6em;"/>
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.updateBy }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="status">

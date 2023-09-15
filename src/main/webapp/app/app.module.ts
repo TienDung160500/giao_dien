@@ -1,3 +1,5 @@
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +26,7 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AutocompleteLibModule } from 'angular-ng-autocomplete';
+
 
 @NgModule({
   imports: [
@@ -39,6 +41,7 @@ import { AutocompleteLibModule } from 'angular-ng-autocomplete';
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-', caseSensitive: true }),
     BrowserAnimationsModule,
     AutocompleteLibModule,
+
   ],
   providers: [
     Title,

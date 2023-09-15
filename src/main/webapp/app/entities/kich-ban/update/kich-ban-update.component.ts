@@ -1,6 +1,8 @@
+import { IChiTietKichBan } from 'app/entities/chi-tiet-kich-ban/chi-tiet-kich-ban.model';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { IThietBi } from 'app/entities/thiet-bi/thiet-bi.model';
-import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit, Input } from '@angular/core';
+import { HttpResponse, HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -18,12 +20,32 @@ import { KichBanService } from '../service/kich-ban.service';
   styleUrls: ['./kich-ban-update.component.css'],
 })
 export class KichBanUpdateComponent implements OnInit {
+  //------------------- url lay danh sach thong so theo ma thiet bi --------------------
+  thietBiUrl = this.applicationConfigService.getEndpointFor('api/thiet-bi/danh-sach-thong-so-thiet-bi');
+  // ----------------- url luu thong so kich ban theo ma thiet bi -----------------------
+  chiTietKichBanUrl = this.applicationConfigService.getEndpointFor('api/kich-ban/them-moi-thong-so-kich-ban');
+
   isSaving = false;
   predicate!: string;
   ascending!: boolean;
 
-  idThongSoKichBan?: number | null | undefined;
   i = 0;
+
+  editId: number | null = null;
+  //--------------------------------------------- khoi tao input thong so kich ban
+  @Input() idKichBan = '';
+  @Input() maKichBan = '';
+  @Input() thongSo = '';
+  @Input() minValue = 0;
+  @Input() maxValue = 0;
+  @Input() trungBinh = 0;
+  @Input() donVi = '';
+  @Input() phanLoai = '';
+  //----------------------------------------- khoi tao input kich ban
+  @Input() maThietBi = '';
+  @Input() loaiThietBi = '';
+  @Input() maSanPham = '';
+  @Input() versionSanPham = '';
 
   thietBisSharedCollection: IThietBi[] = [];
   kichBansSharedCollection: IKichBan[] = [];
@@ -33,18 +55,17 @@ export class KichBanUpdateComponent implements OnInit {
 
   form!: FormGroup;
 
-  listOfThongSo = [
-    {
-      idThongSoKichBan: this.idThongSoKichBan,
-      thongSo: '.',
-      Min: '',
-      Max: '.',
-      trungBinh: '.',
-      donVi: this.selectedValues,
-      phanLoai: this.selectedParameter,
-    },
-  ];
-  
+  listOfChiTietKichBan: {
+    idKichBan: number;
+    maKichBan: string;
+    thongSo: string | null | undefined;
+    minValue: number;
+    maxValue: number;
+    trungBinh: number;
+    donVi: string;
+    phanLoai: string;
+  }[] = [];
+ 
   editForm = this.fb.group({
     id: [],
     maKichBan: [],
@@ -59,7 +80,13 @@ export class KichBanUpdateComponent implements OnInit {
     trangThai: [],
   });
 
-  constructor(protected kichBanService: KichBanService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+  constructor(
+    protected kichBanService: KichBanService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService
+  ) {
     this.form = this.fb.group({
       maKichBan: null,
       tenKichBan: null,
@@ -80,22 +107,6 @@ export class KichBanUpdateComponent implements OnInit {
 
       this.updateForm(kichBan);
     });
-  }
-
-  addRow(): void {
-    const newRow = {
-      idThongSoKichBan: this.idThongSoKichBan,
-      thongSo: '.',
-      Min: '.',
-      Max: '.',
-      trungBinh: '.',
-      donVi: this.selectedValues,
-      phanLoai: this.selectedParameter,
-    };
-
-    this.listOfThongSo = [...this.listOfThongSo, newRow];
-    console.log('add row', this.listOfThongSo);
-    this.i++;
   }
 
   onChangeValues(): void {
@@ -149,26 +160,52 @@ export class KichBanUpdateComponent implements OnInit {
     }
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IKichBan>>): void {
+  //---------------------------- luu thong so kich ban chi tiet ---------------------------
+  saveChiTietKichBan(): void {
+    console.log(this.listOfChiTietKichBan);
+    // //------------ cập nhật kich_ban_id trong table chi tiết kịch bản -------------
+    // this.http.post<any>(this.chiTietKichBanUrl,this.listOfChiTietKichBan).subscribe(res=>{
+    //   alert('thanh cong');
+    //   this.previousState();
+    // })
+    // console.log(this.listOfChiTietKichBan);
+  }
+
+  // lấy id kịch bản
+  subscribeToCreateResponse(result: Observable<HttpResponse<IKichBan>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(res => {
+      console.log(res.body);
+      // gán id kịch bản, mã kịch bản vào list chi tiết kịch bản request
+      if (res.body?.id) {
+        for (let i = 0; i < this.listOfChiTietKichBan.length; i++) {
+          this.listOfChiTietKichBan[i].idKichBan = res.body.id;
+          this.listOfChiTietKichBan[i].maKichBan = this.maKichBan;
+        }
+      }
+      console.log('gan: ', this.listOfChiTietKichBan);
+    });
+  }
+
+  subscribeToSaveResponse(result: Observable<HttpResponse<IKichBan>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
       error: () => this.onSaveError(),
     });
   }
 
-  protected onSaveSuccess(): void {
+  onSaveSuccess(): void {
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  onSaveError(): void {
     // Api for inheritance.
   }
 
-  protected onSaveFinalize(): void {
+  onSaveFinalize(): void {
     this.isSaving = false;
   }
 
-  protected updateForm(kichBan: IKichBan): void {
+  updateForm(kichBan: IKichBan): void {
     this.editForm.patchValue({
       id: kichBan.id,
       maKichBan: kichBan.maKichBan,
@@ -184,7 +221,11 @@ export class KichBanUpdateComponent implements OnInit {
     });
   }
 
-  protected createFromForm(): IKichBan {
+  trackId(_index: number, item: IChiTietKichBan): number {
+    return item.id!;
+  }
+
+  createFromForm(): IKichBan {
     return {
       ...new KichBan(),
       id: this.editForm.get(['id'])!.value,
@@ -199,5 +240,61 @@ export class KichBanUpdateComponent implements OnInit {
       updateBy: this.editForm.get(['updateBy'])!.value,
       trangThai: this.editForm.get(['trangThai'])!.value,
     };
+  }
+
+  //------------------------------ lay thong tin thiet bi thong qua ma thiet bi va loai thiet bi ------------------------------
+  getThietBi(maThietBi: string): void {
+    this.http.get<IChiTietKichBan[]>(`${this.thietBiUrl}/${maThietBi}`).subscribe((res: IChiTietKichBan[]) => {
+      // khoi tao danh sach
+      for (let i = 0; i < res.length; i++) {
+        const newRows: {
+          idKichBan: number;
+          maKichBan: string;
+          thongSo: string | null | undefined;
+          minValue: number;
+          maxValue: number;
+          trungBinh: number;
+          donVi: string;
+          phanLoai: string;
+        } = {
+          idKichBan: 0,
+          maKichBan: '',
+          thongSo: '',
+          minValue: 0,
+          maxValue: 0,
+          trungBinh: 0,
+          donVi: '...',
+          phanLoai: '...',
+        };
+        this.listOfChiTietKichBan.push(newRows);
+        this.listOfChiTietKichBan[i].thongSo = res[i].thongSo;
+      }
+      //gan ten thong so cho danh sach
+      // for(let i = 0; i< this.listOfChiTietKichBan.length;i++){
+      //   this.listOfChiTietKichBan[i].thongSo = res[i].thongSo
+      //   console.log(`list:${i} `,this.listOfChiTietKichBan[i].thongSo,` - res: ${i} `,res[i].thongSo)
+      // }
+    });
+  }
+
+  //----------------------------------------- them moi chi tiet kich ban --------------------------
+
+  startEdit2(id: number): void {
+    this.editId = id;
+  }
+
+  addRowThongSoKichBan(): void {
+    const newRow = {
+      idKichBan: 0,
+      maKichBan: this.maKichBan,
+      thongSo: '',
+      minValue: 0,
+      maxValue: 0,
+      trungBinh: 0,
+      donVi: '...',
+      phanLoai: '...',
+    };
+    this.listOfChiTietKichBan.push(newRow);
+    console.log('add row', this.listOfChiTietKichBan);
   }
 }

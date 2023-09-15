@@ -1,3 +1,6 @@
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { HttpClient } from '@angular/common/http';
+import { IChiTietKichBan } from 'app/entities/chi-tiet-kich-ban/chi-tiet-kich-ban.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,16 +11,30 @@ import { IKichBan } from '../kich-ban.model';
   templateUrl: './kich-ban-detail.component.html',
 })
 export class KichBanDetailComponent implements OnInit {
+  resourceUrl = this.applicationConfigService.getEndpointFor('api/kich-ban/thong-so-kich-ban');
   predicate!: string;
   ascending!: boolean;
   kichBan: IKichBan | null = null;
+  chiTietKichBans: IChiTietKichBan | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ kichBan }) => {
       this.kichBan = kichBan;
     });
+    // lay thong tin thong so thiet bi
+    if (this.kichBan?.id) {
+      this.http.get<any>(`${this.resourceUrl}/${this.kichBan.id}`).subscribe(res => {
+        this.chiTietKichBans = res;
+        console.log('res :', res);
+        console.log('chi tiet thiet bi :', this.chiTietKichBans);
+      });
+    }
   }
 
   previousState(): void {

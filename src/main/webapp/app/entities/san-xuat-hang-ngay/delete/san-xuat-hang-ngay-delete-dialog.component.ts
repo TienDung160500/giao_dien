@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,9 +10,15 @@ import { SanXuatHangNgayService } from '../service/san-xuat-hang-ngay.service';
   templateUrl: './san-xuat-hang-ngay-delete-dialog.component.html',
 })
 export class SanXuatHangNgayDeleteDialogComponent {
+  resourceUrlAdd = this.applicationConfigService.getEndpointFor('api/san-xuat-hang-ngay/del-kich-ban');
   sanXuatHangNgay?: ISanXuatHangNgay;
 
-  constructor(protected sanXuatHangNgayService: SanXuatHangNgayService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected sanXuatHangNgayService: SanXuatHangNgayService,
+    protected activeModal: NgbActiveModal,
+    protected applicationConfigService: ApplicationConfigService,
+    protected http: HttpClient
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

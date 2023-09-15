@@ -64,6 +64,17 @@ export class QuanLyThongSoComponent implements OnInit {
 
   searchResults: IQuanLyThongSo[] = [];
 
+  editForm = this.fb.group({
+    id: [],
+    maThongSo: [],
+    tenThongSo: [],
+    moTa: [],
+    ngayTao: [],
+    ngayUpdate: [],
+    updateBy: [],
+    status: [],
+  });
+
   constructor(
     protected quanLyThongSoService: QuanLyThongSoService,
     protected activatedRoute: ActivatedRoute,
@@ -71,8 +82,8 @@ export class QuanLyThongSoComponent implements OnInit {
     protected modalService: NgbModal,
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
-    private formBuilder: FormBuilder
-  ) {}
+    private fb: FormBuilder
+  ) { }
 
   getQuanLyThongSoList(): void {
     this.http.get<any>(this.resourceUrlSearch).subscribe(res => {
@@ -88,6 +99,41 @@ export class QuanLyThongSoComponent implements OnInit {
   onChangeQuanlyThongSo(): void {
     const results = this.quanLyThongSo.find((obj: IQuanLyThongSo) => obj.maThongSo === this.maThongSo);
     console.log(results);
+  }
+
+  selectedMaThongSo(maThongSo: IQuanLyThongSo): void {
+    this.editForm.patchValue({
+      maThongSo: maThongSo.maThongSo,
+    });
+  }
+
+  search = (text: Observable<any>): Observable<any> =>
+    text.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: string) => {
+        if (this.searchByMaThongSo(term))
+          // this.searchResults.maThongSo(term);
+      })
+    );
+  
+  searchByMaThongSo(term: string): any {
+    if (term === '') {
+      return of([]);
+    }
+    const timKiem = {
+      maThongSo: this.maThongSo,
+      tenThongSo: this.tenThongSo,
+      moTa: this.moTa,
+      ngayTao: this.ngayTao,
+      ngayUpdate: this.ngayUpdate,
+      updateBy: '',
+      status: this.status,
+    };
+    return this.http.post<any>(this.resourceUrl, timKiem).subscribe(res => {
+      //luu du lieu tra ve de hien thi len front-end
+      this.quanLyThongSos = res;
+    });
   }
 
   onSearch(): void {
@@ -107,10 +153,10 @@ export class QuanLyThongSoComponent implements OnInit {
       updateBy: '',
       status: this.status,
     };
-      this.http.post<any>(this.resourceUrl, timKiem).subscribe(res => {
-        //luu du lieu tra ve de hien thi len front-end
-        this.quanLyThongSos = res;
-      });
+    this.http.post<any>(this.resourceUrl, timKiem).subscribe(res => {
+      //luu du lieu tra ve de hien thi len front-end
+      this.quanLyThongSos = res;
+    });
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

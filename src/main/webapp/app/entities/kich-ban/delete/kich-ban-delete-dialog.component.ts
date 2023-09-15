@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -9,15 +11,21 @@ import { KichBanService } from '../service/kich-ban.service';
 })
 export class KichBanDeleteDialogComponent {
   kichBan?: IKichBan;
+  resourceUrlAdd = this.applicationConfigService.getEndpointFor('api/kich-ban/del-kich-ban');
 
-  constructor(protected kichBanService: KichBanService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected kichBanService: KichBanService,
+    protected activeModal: NgbActiveModal,
+    protected applicationConfigService: ApplicationConfigService,
+    protected http: HttpClient
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmDelete(id: number): void {
-    this.kichBanService.delete(id).subscribe(() => {
+    this.http.delete(`${this.resourceUrlAdd}/${id}`).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

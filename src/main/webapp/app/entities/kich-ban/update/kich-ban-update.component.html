@@ -10,38 +10,20 @@
             <label for="maKichBan">
               <h5>Mã kịch bản</h5>
             </label>
-            <select class="form-control" id="maKichBan"name="maKichBan" formControlName="maKichBan" (change)="onMaKichBanChange()">
-              <option [ngValue]="null"></option>
-              <option
-                [ngValue]="maKichBanOption.maKichBan"
-                *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
-                {{maKichBanOption.maKichBan}}</option>
-            </select>
+            <input class="form-control" id="maKichBan"name="maKichBan" formControlName="maKichBan" [(ngModel)]="maKichBan" >
           </div>
           <div>
           <label for="loaiThietBi">
             <h5>Loại thiết bị</h5>
           </label>
-          <select class="form-control" id="loaiThietBi" name="loaiThietBi" formControlName="loaiThietBi">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="maKichBanOption.loaiThietBi"
-              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
-              {{maKichBanOption.loaiThietBi}}</option>
-          </select>
+          <input class="form-control" id="loaiThietBi" name="loaiThietBi" formControlName="loaiThietBi" [(ngModel)]="loaiThietBi" >
         </div>
 
         <div>
             <label for="maThietBi">
               <h5>Mã thiết bị</h5>
             </label>
-            <select class="form-control" id="maThietBi" name="maThietBi" formControlName="maThietBi">
-              <option [ngValue]="null"></option>
-              <option
-                [ngValue]="maKichBanOption.maThietBi"
-                *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
-                {{maKichBanOption.maThietBi}}</option>
-            </select>
+            <input class="form-control" id="maThietBi" name="maThietBi" formControlName="maThietBi" [(ngModel)]="maThietBi" (keydown.tab)="getThietBi(maThietBi)">
           </div>
         </div>
 
@@ -51,47 +33,35 @@
           <label for="maSanPham">
             <h5>Mã sản phẩm</h5>
           </label>
-          <select class="form-control" id="maSanPham" name="maSanPham" formControlName="maSanPham">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="maKichBanOption.maSanPham"
-              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
-              {{maKichBanOption.maSanPham}}</option>  
-          </select>
+          <input class="form-control" id="maSanPham" name="maSanPham" formControlName="maSanPham" [(ngModel)]="maSanPham" > 
         </div>  
         
         <div>
           <label for="versionSanPham">
             <h5>Version sản phẩm</h5>
           </label>
-          <select class="form-control" id="versionSanPham" name="versionSanPham" formControlName="versionSanPham">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="maKichBanOption.versionSanPham"
-              *ngFor="let maKichBanOption of kichBansSharedCollection; trackBy: trackThietBiById">
-              {{maKichBanOption.versionSanPham}}</option>
-          </select>
+          <input class="form-control" id="versionSanPham" name="versionSanPham" formControlName="versionSanPham" [(ngModel)]="versionSanPham">
         </div>
       </div>
-      <button
-        type="submit"
-        id="save-entity"
-        data-cy="entityCreateSaveButton"
-        [disabled]="editForm.invalid || isSaving"
-        class="btn btn-primary"
-        style="width: 5em;"
-      >
-        <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
-      </button>
       </header>
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
       <div>
 
       <h2 id="jhi-kich-ban-heading" data-cy="KichBanCreateUpdateHeading" style="padding-top: 2em;">Thông số kịch bản</h2>
-        <button class="btn-add" style="border-radius: 0.5em;" (click)="addRow()"><fa-icon icon="plus"></fa-icon> Add</button>
+        <button class="btn-add" style="border-radius: 0.5em;" (click)="addRowThongSoKichBan()">Add</button>
 
         <table class="table table-striped" aria-describedby="page-heading">
           <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending">
+              <th scope="col" jhiSortBy="maKichBan"><span>STT</span></th>
               <th scope="col" jhiSortBy="maKichBan"><span>Thông số</span></th>
               <th scope="col" jhiSortBy="thongSo"><span>Min</span></th>
               <th scope="col" jhiSortBy="trangThai"><span>Max</span></th>
@@ -103,22 +73,33 @@
           </thead>
 
           <tbody>
-            <tr  data-cy="entityTable">
+            <tr *ngFor="let data of listOfChiTietKichBan; let i = index; trackBy: trackId" class="editable-row" data-cy="entityTable">
               <td>
-                <input type="text" class="form-control-table" name="thongSo" id="field_thongSo"
-                  formControlName="thongSo" />
+                <div>{{i+1}}</div>
               </td>
               <td>
-                <input type="text" class="form-control-table" name="MinValue" id="field_MinValue"
-                  formControlName="MinValue" />
+                <div>{{data.thongSo}}</div>
               </td>
               <td>
-                <input type="text" class="form-control-table" name="MaxValue" id="field_MaxValue"
-                  formControlName="MaxValue" />
+                <input 
+                type="text"  
+                [(ngModel)]="data.minValue"  
+                [ngModelOptions]="{standalone: true}" 
+                placeholder="{{data.minValue}}"
+                  />
               </td>
               <td>
-                <input type="text" class="form-control-table" name="trungBinh" id="field_trungBinh"
-                  formControlName="trungBinh" />
+                <input type="text" 
+                 [(ngModel)]="data.maxValue" 
+                 placeholder="{{data.maxValue}}"  
+                 [ngModelOptions]=" {standalone: true}"
+                />
+              <td>
+                 <input type="text"
+                 [(ngModel)]="data.trungBinh" 
+                 placeholder="{{data.trungBinh}}" 
+                 [ngModelOptions]="{standalone: true}"
+                />
               </td>
               <td >
                 <select class="form-control-table" id="donVi" data-cy="donVi" name="donVi" formControlName="donVi" [(ngModel)]="selectedValues" (change)="onChangeValues()">

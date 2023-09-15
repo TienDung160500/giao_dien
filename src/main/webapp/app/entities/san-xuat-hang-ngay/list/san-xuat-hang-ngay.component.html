@@ -37,89 +37,51 @@
           <th scope="col" jhiSortBy="maKichBan">
             <span class="column-header">Mã kịch bản</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="maKichBan" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.maKichBan }}</li>
-            </ul>
+            <div class="ng-autocomplete">
+              <!-- <ng-autocomplete></ng-autocomplete> -->
+            </div>
           </th>
 
           <th scope="col" jhiSortBy="maThietBi">
             <span class="column-header">Mã thiết bị</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="maThietBi" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.maThietBi }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="loaiThietBi">
             <span class="column-header">Loại thiết bị</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="loaiThietBi" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.loaiThietBi }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="dayChuyen">
             <span class="column-header">Dây chuyền</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="dayChuyen" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.dayChuyen }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="maSanPham">
             <span class="column-header">Mã sản phẩm</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="maSanPham" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.maSanPham }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="versionSanPham">
             <span class="column-header">Vesion sản phẩm</span>
             <input #searchInput class="search-input" type="text" [(ngModel)]="versionSanPham" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.versionSanPham }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="ngayTao">
             <span class="column-header">Ngày tạo</span>
             <input #searchInput class="search-input" type="datetime-local" [(ngModel)]="ngayTao" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.ngayTao }}</li>
-            </ul>
+            
           </th>
 
           <th scope="col" jhiSortBy="timeUpdate">
             <span class="column-header">Time Update</span>
             <input #searchInput class="search-input" type="datetime-local" [(ngModel)]="timeUpdate" (keyup.enter)= "timKiemThietBi()" placeholder="search" />
-            <ul>
-              <li *ngFor="let suggesion of searchSuggestions">{{suggesion}}</li>
-            </ul>
-            <ul *ngIf="searchResults.length > 0">
-              <li *ngFor="let result of searchResults">{{ result.timeUpdate }}</li>
-            </ul>
+           
           </th>
 
           <th scope="col" jhiSortBy="trangThai">
